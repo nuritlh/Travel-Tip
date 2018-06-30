@@ -5,7 +5,7 @@ function getWeatherByPos(currLat, currLng) {
   var lon = currLng;
   console.log('Getting weather by pos');
   var prm = axios.get(
-    `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&APPID=${W_KEY}`
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&APPID=${W_KEY}`
   );
   return prm.then(function(res) {
     return res.data;

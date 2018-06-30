@@ -32,7 +32,7 @@ function getPositionByName(cityName) {
 function gePosByCoords(currLat, currLng) {
   var latlng = '' + currLat + ', ' + currLng;
   var prm = axios.get(
-    `http://maps.googleapis.com/maps/api/geocode/json?latlng=` +
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=` +
       latlng +
       `&sensor=false`
   );

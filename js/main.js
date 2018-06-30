@@ -36,7 +36,8 @@ var setMapByCurrPos = () => {
       console.log('err!!!', err);
     });
 };
-window.onload = checkForCopyLocURL();
+// window.onload = checkForCopyLocURL();
+window.onload = checkForCopyLocURL2();
 
 document.querySelector('.my-loc-btn').addEventListener('click', ev => {
   setMapByCurrPos();
@@ -107,7 +108,7 @@ document.querySelector('.copt-btn').addEventListener('click', ev => {
   let tmpCopyArea = document.createElement('textarea');
   document.body.appendChild(tmpCopyArea);
   tmpCopyArea.value =
-    'https://nuritlh.github.io/Travel-Tip/lat=' +
+    'https://nuritlh.github.io/Travel-Tip/?lat=' +
     location[0] +
     '&lng=' +
     location[1];
@@ -142,4 +143,42 @@ function checkForCopyLocURL() {
   } else {
     setMapByCurrPos();
   }
+}
+
+function checkForCopyLocURL2() {
+  if (utilsService.loadFromStorage('copyLocation') !== null) {
+    let locationurl = utilsService.loadFromStorage('copyLocation');
+    console.log('onloadloc', locationurl);
+    var lat = getParameterByName('lat', locationurl);
+    var lng = getParameterByName('lng', locationurl);
+
+    locService.gePosByCoords(lat, lng).then(function(cityName) {
+      renderCurrLocation(cityName.results[0].formatted_address);
+    });
+    utilsService.saveToStorage('location', lat, lng);
+    renderWeatherBox(lat, lng);
+    mapService
+      .initMap(lat, lng)
+      .then(() => {
+        mapService.addMarker({
+          lat: lat,
+          lng: lng
+        });
+      })
+      .catch(console.warn);
+    window.localStorage.removeItem('copyLocationLocal');
+    window.localStorage.removeItem('copyLocation');
+  } else {
+    setMapByCurrPos();
+  }
+}
+
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

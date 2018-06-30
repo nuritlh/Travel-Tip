@@ -151,29 +151,3 @@ function getParameterByName(name, url) {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
-// function checkForCopyLocURL() {
-//   if (utilsService.loadFromStorage('copyLocationLocal') !== null) {
-//     let location = utilsService.loadFromStorage('copyLocationLocal');
-//     console.log('onloadloc', location);
-
-//     locService.gePosByCoords(location[0], location[1]).then(function(cityName) {
-//       renderCurrLocation(cityName.results[0].formatted_address);
-//     });
-//     utilsService.saveToStorage('location', [location[0], location[1]]);
-//     renderWeatherBox(location[0], location[1]);
-//     mapService
-//       .initMap(location[0], location[1])
-//       .then(() => {
-//         mapService.addMarker({
-//           lat: location[0],
-//           lng: location[1]
-//         });
-//       })
-//       .catch(console.warn);
-//     window.localStorage.removeItem('copyLocationLocal');
-//     window.localStorage.removeItem('copyLocation');
-//   } else {
-//     setMapByCurrPos();
-//   }
-// }

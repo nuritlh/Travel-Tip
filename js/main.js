@@ -90,14 +90,14 @@ function renderCurrLocation(CityName) {
 function renderWeatherBox(lat, lng) {
   weatherService.getWeatherByPos(lat, lng).then(weather => {
     console.log('weather', weather);
-    let strHTML = `current temp :` + weather.main.temp;
-    strHTML += ` humidity :` + weather.main.humidity;
+    let strHTML = `Current temp :` + weather.main.temp;
+    strHTML += `</br> Humidity :` + weather.main.humidity;
 
     document.querySelector('.weather').innerHTML = strHTML;
   });
 }
 
-document.querySelector('.copt-btn').addEventListener('click', ev => {
+document.querySelector('.copy-btn').addEventListener('click', ev => {
   //   copy lan/lng location and share app
   let location = utilsService.loadFromStorage('location');
   let tmpCopyArea = document.createElement('textarea');
@@ -110,13 +110,10 @@ document.querySelector('.copt-btn').addEventListener('click', ev => {
   tmpCopyArea.select();
   document.execCommand('copy');
   document.body.removeChild(tmpCopyArea);
-  utilsService.saveToStorage('copyLocation', tmpCopyArea.value);
 });
 
 function checkForCopyLocURL() {
-  // let locationurl = utilsService.loadFromStorage('copyLocation');
   let locationurl = window.location.href;
-  window.localStorage.removeItem('copyLocation');
   console.log(locationurl);
 
   var lat = +getParameterByName('lat', locationurl);
@@ -136,7 +133,6 @@ function checkForCopyLocURL() {
         });
       })
       .catch(console.warn);
-    window.localStorage.removeItem('copyLocation');
   } else {
     setMapByCurrPos();
   }

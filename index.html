@@ -7,19 +7,28 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
         crossorigin="anonymous">
+    <link rel="icon" href="img/tempsnip.png">
     <title>TravelTip</title>
 </head>
 
 <body>
-    <header>
+    <header class="flex">
         <h1>TravelTip</h1>
-        <button class="btn copt-btn">
-            <i class="far fa-copy"></i>
-
-            Location</button>
-        <input type="text" name="" id="searchBox">
-        <button class="btn search-btn">Go</button>
-        <button class="btn my-loc-btn">My Lovation</button>
+        <div>
+            <button class="btn copy-btn">
+                <i class="far fa-copy"></i>
+                <span>Location</span>
+            </button>
+            <input type="text" name="" id="searchBox">
+            <button class="btn search-btn">
+                <i class="fas fa-location-arrow"></i>
+            </button>
+            <button class="btn my-loc-btn">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>
+                    My Location</span>
+            </button>
+        </div>
     </header>
     <main>
         <h3>Location:

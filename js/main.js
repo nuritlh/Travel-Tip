@@ -35,6 +35,7 @@ var setMapByCurrPos = () => {
     .catch(err => {
       console.log('err!!!', err);
     });
+  document.querySelector('#searchBox').value = 'Your Location';
 };
 // window.onload = checkForCopyLocURL();
 window.onload = checkForCopyLocURL2();
@@ -149,8 +150,8 @@ function checkForCopyLocURL2() {
   if (utilsService.loadFromStorage('copyLocation') !== null) {
     let locationurl = utilsService.loadFromStorage('copyLocation');
     console.log('onloadloc', locationurl);
-    var lat = getParameterByName('lat', locationurl);
-    var lng = getParameterByName('lng', locationurl);
+    var lat = +getParameterByName('lat', locationurl);
+    var lng = +getParameterByName('lng', locationurl);
 
     locService.gePosByCoords(lat, lng).then(function(cityName) {
       renderCurrLocation(cityName.results[0].formatted_address);

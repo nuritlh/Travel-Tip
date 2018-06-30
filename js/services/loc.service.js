@@ -29,7 +29,7 @@ function getPositionByName(cityName) {
   });
 }
 
-function getCityNameByCoords(currLat, currLng) {
+function gePosByCoords(currLat, currLng) {
   var latlng = '' + currLat + ', ' + currLng;
   var prm = axios.get(
     `http://maps.googleapis.com/maps/api/geocode/json?latlng=` +
@@ -45,5 +45,5 @@ export default {
   getLocs,
   getPosition,
   getPositionByName,
-  getCityNameByCoords
+  gePosByCoords
 };

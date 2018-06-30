@@ -3,21 +3,25 @@ console.log('Main!');
 import locService from './services/loc.service.js';
 import mapService from './services/map.service.js';
 import weatherService from './services/weather.service.js';
+import utilsService from './utils.js';
 
 locService.getLocs().then(locs => console.log('locs', locs));
 
-var setMapByCords = () => {
+var setMapByCurrPos = () => {
   locService
     .getPosition()
     .then(pos => {
       console.log('posi', pos);
       locService
-        .getCityNameByCoords(pos.coords.latitude, pos.coords.longitude)
+        .gePosByCoords(pos.coords.latitude, pos.coords.longitude)
         .then(function(cityName) {
           renderCurrLocation(cityName.results[0].formatted_address);
         });
+      utilsService.saveToStorage('location', [
+        pos.coords.latitude,
+        pos.coords.longitude
+      ]);
       renderWeatherBox(pos.coords.latitude, pos.coords.longitude);
-
       mapService
         .initMap(pos.coords.latitude, pos.coords.longitude)
         .then(() => {
@@ -32,11 +36,10 @@ var setMapByCords = () => {
       console.log('err!!!', err);
     });
 };
-
-window.onload = setMapByCords();
+window.onload = checkForCopyLocURL();
 
 document.querySelector('.my-loc-btn').addEventListener('click', ev => {
-  setMapByCords();
+  setMapByCurrPos();
   //   console.log('Aha!', ev.target);
 });
 
@@ -47,6 +50,14 @@ document.querySelector('.search-btn').addEventListener('click', ev => {
     .getPositionByName(cityName)
     .then(pos => {
       console.log(pos);
+      renderWeatherBox(
+        pos.results[0].geometry.location.lat,
+        pos.results[0].geometry.location.lng
+      );
+      utilsService.saveToStorage('location', [
+        pos.results[0].geometry.location.lat,
+        pos.results[0].geometry.location.lng
+      ]);
       mapService
         .initMap(
           pos.results[0].geometry.location.lat,
@@ -88,4 +99,47 @@ function renderWeatherBox(lat, lng) {
 
     document.querySelector('.weather').innerHTML = strHTML;
   });
+}
+
+document.querySelector('.copt-btn').addEventListener('click', ev => {
+  //   copy lan/lng location and share app
+  let location = utilsService.loadFromStorage('location');
+  let tmpCopyArea = document.createElement('textarea');
+  document.body.appendChild(tmpCopyArea);
+  tmpCopyArea.value =
+    'https://nuritlh.github.io/Travel-Tip/lat=' +
+    location[0] +
+    '&lng=' +
+    location[1];
+  tmpCopyArea.select();
+  document.execCommand('copy');
+  document.body.removeChild(tmpCopyArea);
+  utilsService.saveToStorage('copyLocation', tmpCopyArea.value);
+  utilsService.saveToStorage('copyLocationLocal', [location[0], location[1]]);
+});
+
+function checkForCopyLocURL() {
+  if (utilsService.loadFromStorage('copyLocationLocal') !== null) {
+    let location = utilsService.loadFromStorage('copyLocationLocal');
+    console.log('onloadloc', location);
+
+    locService.gePosByCoords(location[0], location[1]).then(function(cityName) {
+      renderCurrLocation(cityName.results[0].formatted_address);
+    });
+    utilsService.saveToStorage('location', [location[0], location[1]]);
+    renderWeatherBox(location[0], location[1]);
+    mapService
+      .initMap(location[0], location[1])
+      .then(() => {
+        mapService.addMarker({
+          lat: location[0],
+          lng: location[1]
+        });
+      })
+      .catch(console.warn);
+    window.localStorage.removeItem('copyLocationLocal');
+    window.localStorage.removeItem('copyLocation');
+  } else {
+    setMapByCurrPos();
+  }
 }

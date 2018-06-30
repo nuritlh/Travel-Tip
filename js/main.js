@@ -120,39 +120,41 @@ document.querySelector('.copt-btn').addEventListener('click', ev => {
   utilsService.saveToStorage('copyLocationLocal', [location[0], location[1]]);
 });
 
-function checkForCopyLocURL() {
-  if (utilsService.loadFromStorage('copyLocationLocal') !== null) {
-    let location = utilsService.loadFromStorage('copyLocationLocal');
-    console.log('onloadloc', location);
+// function checkForCopyLocURL() {
+//   if (utilsService.loadFromStorage('copyLocationLocal') !== null) {
+//     let location = utilsService.loadFromStorage('copyLocationLocal');
+//     console.log('onloadloc', location);
 
-    locService.gePosByCoords(location[0], location[1]).then(function(cityName) {
-      renderCurrLocation(cityName.results[0].formatted_address);
-    });
-    utilsService.saveToStorage('location', [location[0], location[1]]);
-    renderWeatherBox(location[0], location[1]);
-    mapService
-      .initMap(location[0], location[1])
-      .then(() => {
-        mapService.addMarker({
-          lat: location[0],
-          lng: location[1]
-        });
-      })
-      .catch(console.warn);
-    window.localStorage.removeItem('copyLocationLocal');
-    window.localStorage.removeItem('copyLocation');
-  } else {
-    setMapByCurrPos();
-  }
-}
+//     locService.gePosByCoords(location[0], location[1]).then(function(cityName) {
+//       renderCurrLocation(cityName.results[0].formatted_address);
+//     });
+//     utilsService.saveToStorage('location', [location[0], location[1]]);
+//     renderWeatherBox(location[0], location[1]);
+//     mapService
+//       .initMap(location[0], location[1])
+//       .then(() => {
+//         mapService.addMarker({
+//           lat: location[0],
+//           lng: location[1]
+//         });
+//       })
+//       .catch(console.warn);
+//     window.localStorage.removeItem('copyLocationLocal');
+//     window.localStorage.removeItem('copyLocation');
+//   } else {
+//     setMapByCurrPos();
+//   }
+// }
 
 function checkForCopyLocURL2() {
-  if (utilsService.loadFromStorage('copyLocation') !== null) {
-    let locationurl = utilsService.loadFromStorage('copyLocation');
-    console.log('onloadloc', locationurl);
-    var lat = +getParameterByName('lat', locationurl);
-    var lng = +getParameterByName('lng', locationurl);
+  // if (utilsService.loadFromStorage('copyLocation') !== null) {
+  //   let locationurl = utilsService.loadFromStorage('copyLocation');
+  //   console.log('onloadloc', locationurl);
+  let locationurl = utilsService.loadFromStorage('copyLocation');
 
+  var lat = +getParameterByName('lat', locationurl);
+  var lng = +getParameterByName('lng', locationurl);
+  if (lat !== 0 || lng !== 0) {
     locService.gePosByCoords(lat, lng).then(function(cityName) {
       renderCurrLocation(cityName.results[0].formatted_address);
     });

@@ -85,6 +85,7 @@ main h3 {
   margin: 5px auto;
   width: 90%;
   padding: 20px;
+  color: white;
 }
 
 @media only screen and (max-width: 610px) {
